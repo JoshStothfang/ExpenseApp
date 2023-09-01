@@ -20,6 +20,6 @@ namespace ExpenseApp.Data
         
         public DbSet<ExpenseLine> ExpenseLines { get; set; } = default!;
         
-        public DbSet<ExpenseApp.Models.Item> Item { get; set; } = default!;
+        public DbSet<ExpenseApp.Models.Item> Items { get; set; } = default!;
     }
 }
