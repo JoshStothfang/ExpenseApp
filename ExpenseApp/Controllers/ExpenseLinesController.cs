@@ -21,6 +21,22 @@ namespace ExpenseApp.Controllers
             _context = context;
         }
 
+        //Recalculate ExpenseTotal
+        private async Task RecalculateExpenseTotal(int expenseId)
+        {
+            var total = (from el in _context.ExpenseLines
+                         join i in _context.Items
+                            on el.ItemId equals i.Id
+                         where el.ExpenseId == expenseId
+                         select new
+                         {
+                             LineTotal = el.Quantity * i.Price
+                         }).Sum(x => x.LineTotal);
+            var expense = await _context.Expenses.FindAsync(expenseId);
+            expense!.Total = total;
+            await _context.SaveChangesAsync();
+        }
+
         // GET: api/ExpenseLines
         [HttpGet]
         public async Task<ActionResult<IEnumerable<ExpenseLine>>> GetExpenseLines()
@@ -65,6 +81,7 @@ namespace ExpenseApp.Controllers
             try
             {
                 await _context.SaveChangesAsync();
+                await RecalculateExpenseTotal(expenseLine.ExpenseId);
             }
             catch (DbUpdateConcurrencyException)
             {
@@ -92,6 +109,7 @@ namespace ExpenseApp.Controllers
           }
             _context.ExpenseLines.Add(expenseLine);
             await _context.SaveChangesAsync();
+            await RecalculateExpenseTotal(expenseLine.ExpenseId);
 
             return CreatedAtAction("GetExpenseLine", new { id = expenseLine.Id }, expenseLine);
         }
@@ -109,9 +127,10 @@ namespace ExpenseApp.Controllers
             {
                 return NotFound();
             }
-
+            var expId = expenseLine.ExpenseId;
             _context.ExpenseLines.Remove(expenseLine);
             await _context.SaveChangesAsync();
+            await RecalculateExpenseTotal(expId);
 
             return NoContent();
         }
