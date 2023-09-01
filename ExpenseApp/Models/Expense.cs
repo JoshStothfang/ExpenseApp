@@ -16,5 +16,6 @@ namespace ExpenseApp.Models
         public decimal Total { get; set; } = 0;
         public int EmployeeId { get; set; }
         public virtual Employee? Employee { get; set; }
+        public virtual ICollection<Expenseline> Expenselines { get;}
     }
 }
