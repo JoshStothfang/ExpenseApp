@@ -15,5 +15,6 @@ namespace ExpenseApp.Data
         }
 
         public DbSet<Employee> Employees { get; set; } = default!;
+        public DbSet<Expense> Expenses { get; set; } = default!;
     }
 }
