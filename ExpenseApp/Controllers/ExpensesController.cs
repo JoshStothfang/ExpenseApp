@@ -50,6 +50,20 @@ namespace ExpenseApp.Controllers
             return expense;
         }
 
+        // Get: api/Expenses/approved
+        [HttpGet("approved")]
+        public async Task<ActionResult<IEnumerable<Expense>>> GetApprovedExpenses()
+        {
+            var expenses = await _context.Expenses.Where(x => x.Status == "APPROVED").ToListAsync();
+
+            if (expenses == null)
+            {
+                return NotFound();
+            }
+
+            return expenses;
+        }
+
         // PUT: api/Expenses/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]

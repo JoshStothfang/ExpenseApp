@@ -50,6 +50,20 @@ namespace ExpenseApp.Controllers
             return employee;
         }
 
+        // GET: api/Employees/{email}/{password}
+        [HttpGet("{email}/{password}")]
+        public async Task<ActionResult<Employee>> LoginEmployee(string email, string password)
+        {
+            var employee = await _context.Employees.Where(x => x.Email == email && x.Password == password).SingleOrDefaultAsync();
+
+            if (employee == null)
+            {
+                return NotFound();
+            }
+
+            return employee;
+        }
+
         // PUT: api/Employees/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
