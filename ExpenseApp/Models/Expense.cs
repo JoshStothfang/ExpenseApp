@@ -4,7 +4,6 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace ExpenseApp.Models
 {
-    [Index("EmployeeId", IsUnique = true)]
     public class Expense
     {
         public int Id { get; set; }
